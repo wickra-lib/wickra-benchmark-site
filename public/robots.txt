@@ -1,0 +1,6 @@
+# Crawl rules are injected at the edge by Cloudflare's managed robots.txt
+# (Content Signals / AI-crawler policy), which prepends a `User-agent: *` group
+# before this file is served. To avoid a duplicate `User-agent: *` group, this
+# origin file carries only the sitemap pointer.
+
+Sitemap: https://benchmark.wickra.org/sitemap.xml

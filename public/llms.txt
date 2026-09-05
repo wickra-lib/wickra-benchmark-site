@@ -1,0 +1,16 @@
+# Wickra Benchmark
+
+> A streaming-native, event-driven backtester built on the Wickra core. A strategy is data — a JSON spec, not code — so a backtest and a live run over the same spec produce identical signals. Backtest and live are byte-identical, by construction, in ten languages across every binding.
+
+Wickra Benchmark consumes the exact same `wickra-core` O(1) indicator kernels that power live Wickra, and a strategy is a JSON spec, not code — so a backtest and a live run over the same spec produce identical signals across every Wickra language binding. The same engine, fed live instead of historical bars, becomes the live bot: backtest ≡ live, by construction. The strategy spec can reference hundreds of `wickra-core` indicators by name — every backtestable scalar, candle, multi-output, pairwise, derivatives, order-book, trade and cross-section indicator, with multi-output fields addressed as `"name.field"` (`macd.signal`, `bb.upper`, `adx.plus_di`). The core is exposed as a JSON-over-C-ABI data API in Rust, Python, Node.js, WASM and — over a C ABI — C, C++, C#, Go, Java and R, plus an in-browser WASM demo that runs a backtest client-side. Released under the MIT OR Apache-2.0 license.
+
+## Links
+
+- [GitHub](https://github.com/wickra-lib/wickra-benchmark): Source, issues, and releases.
+- [crates.io](https://crates.io/crates/wickra-benchmark): Rust crate.
+- [PyPI](https://pypi.org/project/wickra-benchmark/): Python package.
+- [npm](https://www.npmjs.com/package/wickra-benchmark): Node package.
+
+## Related
+
+- [Wickra](https://wickra.org): The core streaming-indicator library the engine is built on.

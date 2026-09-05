@@ -1,0 +1,21 @@
+{
+  "name": "wickra-benchmark-site",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Marketing site and API aggregator for Wickra Benchmark.",
+  "scripts": {
+    "dev": "vitepress dev",
+    "gen:banner": "node scripts/gen-og-banner.mjs",
+    "build": "node scripts/gen-og-banner.mjs && vitepress build",
+    "preview": "vitepress preview"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "vitepress": "^1.5.0",
+    "vue": "^3.5.0"
+  }
+}

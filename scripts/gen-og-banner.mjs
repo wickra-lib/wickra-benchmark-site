@@ -1,0 +1,48 @@
+/*
+ * Generate public/og-banner.webp from scripts/og-banner.svg, with the indicator
+ * count taken from this site's own content (index.md). Runs as a prebuild step,
+ * so the social-card banner is regenerated on every deploy and can never drift
+ * from the count — no committed image, no manual step. The generated file is
+ * git-ignored.
+ *
+ * resvg renders the SVG to an in-memory PNG buffer (deterministic font handling);
+ * sharp then encodes it as WebP, which is markedly smaller than PNG at the same
+ * quality. No PNG file is ever written — the only artifact is og-banner.webp.
+ */
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
+import { Resvg } from '@resvg/resvg-js'
+import sharp from 'sharp'
+
+const here = dirname(fileURLToPath(import.meta.url))
+const root = resolve(here, '..')
+
+// Count from the site's own content (the number of screenable languages).
+const content = readFileSync(resolve(root, 'index.md'), 'utf-8')
+const m = content.match(/(\d+)\s+languages/i)
+if (!m) {
+  console.error('gen-og-banner: could not find the language count in index.md')
+  process.exit(1)
+}
+const count = m[1]
+
+let svg = readFileSync(resolve(here, 'og-banner.svg'), 'utf-8')
+svg = svg.replace(/\d+ languages/g, `${count} languages`)
+
+const png = new Resvg(svg, {
+  fitTo: { mode: 'width', value: 3840 },
+  font: { loadSystemFonts: true },
+})
+  .render()
+  .asPng()
+
+const webp = await sharp(png).webp({ quality: 90 }).toBuffer()
+
+mkdirSync(resolve(root, 'public'), { recursive: true })
+writeFileSync(resolve(root, 'public/og-banner.webp'), webp)
+
+// The pipeline emits WebP only; a PNG on disk is always a leftover.
+rmSync(resolve(root, 'public/og-banner.png'), { force: true })
+
+console.log(`gen-og-banner: wrote public/og-banner.webp (${count} languages)`)
