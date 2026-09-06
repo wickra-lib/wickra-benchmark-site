@@ -3,7 +3,7 @@
     "alt": "CI",
     "href": "https://github.com/wickra-lib/wickra-benchmark/actions/workflows/ci.yml",
     "file": "/badges/ci.svg",
-    "width": 83,
+    "width": 91,
     "height": 20
   },
   {
@@ -73,7 +73,7 @@
     "alt": "OpenSSF Scorecard",
     "href": "https://scorecard.dev/viewer/?uri=github.com/wickra-lib/wickra-benchmark",
     "file": "/badges/scorecard.svg",
-    "width": 126,
+    "width": 136,
     "height": 20
   },
   {
