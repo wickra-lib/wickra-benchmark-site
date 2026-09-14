@@ -38,6 +38,6 @@ with the exact response each must produce beside it in `golden/expected/`.
 
 ## More
 
-- [docs.rs](https://docs.rs/benchmark-core)
-- [crates.io](https://crates.io/crates/benchmark-core)
+- [docs.rs](https://docs.rs/wickra-benchmark-core)
+- [crates.io](https://crates.io/crates/wickra-benchmark-core)
 - [Source & examples](https://github.com/wickra-lib/wickra-benchmark/tree/main/examples)
