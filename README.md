@@ -1,24 +1,22 @@
 <p align="center">
-  <a href="https://benchmark.wickra.org"><img src="https://raw.githubusercontent.com/wickra-lib/.github/main/profile/wickra-banner.webp?v=514" alt="Wickra Benchmark — backtest and live are byte-identical" width="100%"></a>
+  <a href="https://benchmark.wickra.org"><img src="https://raw.githubusercontent.com/wickra-lib/.github/main/profile/wickra-banner.webp?v=514" alt="Wickra Benchmark — a reproducible, golden-verified benchmark suite — recompute any (strategy, dataset, report) in ten languages and confirm it byte-for-byte" width="100%"></a>
 </p>
 
 [![Built on Wickra](https://img.shields.io/badge/built%20on-wickra-3b82f6)](https://github.com/wickra-lib/wickra)
-[![Live demo](https://img.shields.io/badge/live%20demo-benchmark.wickra.org-3b82f6)](https://benchmark.wickra.org)
-[![Docs](https://raw.githubusercontent.com/wickra-lib/.github/main/profile/badges/wickra-benchmark/docs.svg)](https://docs.wickra.org)
+[![Docs](https://raw.githubusercontent.com/wickra-lib/.github/main/profile/badges/wickra-benchmark/docs.svg)](https://benchmark.wickra.org)
 [![License: MIT OR Apache-2.0](https://raw.githubusercontent.com/wickra-lib/.github/main/profile/badges/wickra-benchmark/license.svg)](https://github.com/wickra-lib/wickra-benchmark#license)
 [![Built with VitePress](https://img.shields.io/badge/built%20with-VitePress-5c73e7?logo=vite&logoColor=white)](https://vitepress.dev)
 
 ---
 
-Source for the Wickra Benchmark marketing site (**[benchmark.wickra.org](https://benchmark.wickra.org)**):
-hero, live in-browser WASM indicator demo, benchmarks, and per-language API
-overviews. Built with [VitePress](https://vitepress.dev).
+Source for the Wickra Benchmark site (**[benchmark.wickra.org](https://benchmark.wickra.org)**): hero, per-language API overviews and benchmarks.
+Built with [VitePress](https://vitepress.dev).
 
 The structure mirrors [webpage](https://github.com/wickra-lib/webpage)
 (wickra.org) and [wickra-docs](https://github.com/wickra-lib/wickra-docs)
-(docs.wickra.org): shared header, footer, theme, badge pipeline, and workflows.
-Wickra Benchmark is a streaming-native, event-driven backtester where a backtest and a live run over the same JSON spec are byte-identical. The library itself is
-[`wickra-lib/wickra-benchmark`](https://github.com/wickra-lib/wickra-benchmark).
+(docs.wickra.org): shared header, footer, theme, badge pipeline and workflows.
+**Wickra Benchmark** — a reproducible, golden-verified benchmark suite — recompute any (strategy, dataset, report) in ten languages and confirm it byte-for-byte. The library itself is
+[`wickra-lib/wickra-benchmark`](https://github.com/wickra-lib/wickra-benchmark); its README carries the install line and a quick start for every language.
 
 ## Develop
 
@@ -29,16 +27,20 @@ npm run build    # production build (also fails on dead internal links)
 npm run preview  # preview the production build
 ```
 
-The live demo loads the published [`wickra-wasm`](https://www.npmjs.com/package/wickra-wasm)
-bundle from npm, so it runs the real Wickra indicators in the browser.
+## What is kept current by workflow
+
+- **The released version** — the version menu in the nav, the Maven snippet on the landing page and the Java API page — is pulled hourly from [wickra-benchmark's latest release](https://github.com/wickra-lib/wickra-benchmark/releases/latest) by `sync-from-benchmark.yml`.
+- **The status badges** in the footer are snapshots refreshed hourly by `refresh-badges.yml`; the SVGs in `public/badges/` are generated, not edited.
+
+Everything else — the copy, the API pages, the benchmark figures (from the repository's `BENCHMARKS.md`) — is edited here by hand.
 
 ## Deploy
 
-Static build via Cloudflare Pages:
+Static build via Cloudflare Pages (Git integration, no deploy secret):
 
 - **Build command:** `npm run build`
 - **Output directory:** `.vitepress/dist`
-- **Node version:** 20
+- **Node version:** 22 (`.nvmrc`)
 
 Custom domain `benchmark.wickra.org` is configured in the Cloudflare Pages dashboard.
 

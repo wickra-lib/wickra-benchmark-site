@@ -1,0 +1,71 @@
+name: Sync from wickra-benchmark
+
+# The version this site shows is decided in wickra-lib/wickra-benchmark: the latest
+# release, not the version on main -- between a bump merging and its tag being
+# pushed, Cargo.toml is ahead of anything a reader can install. Pulling it on a
+# schedule is the only trigger that can work: the value changes in the OTHER
+# repository, so no push here is the event that makes this page wrong.
+#
+# Same shape as webpage's sync-from-wickra.yml.
+on:
+  schedule:
+    - cron: "43 * * * *" # hourly at :43, clear of refresh-badges at :17
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    name: Pull the released version
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # commits the corrected values back to main
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Read the released version from wickra-benchmark
+        id: version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag=$(gh api repos/wickra-lib/wickra-benchmark/releases/latest -q '.tag_name')
+          version="${tag#v}"
+          if ! printf '%s' "$version" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::latest release tag '${tag}' is not a plain vX.Y.Z; refusing to write it"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "wickra-benchmark's latest release is ${version}"
+
+      - name: Apply it
+        env:
+          V: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          sed -i -E "s/(text: 'v)[0-9]+\.[0-9]+\.[0-9]+/\1${V}/" .vitepress/config.ts
+          sed -i -E "s|<version>[0-9]+\.[0-9]+\.[0-9]+</version>|<version>${V}</version>|" index.md api/java.md
+          sed -i -E "s|(org\.wickra:wickra-benchmark:)[0-9]+\.[0-9]+\.[0-9]+|\1${V}|" index.md api/java.md
+
+      - name: Commit if changed
+        env:
+          V: ${{ steps.version.outputs.version }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "already at version ${V}; nothing to commit"
+            exit 0
+          fi
+          git config user.name "wickra-bot"
+          git config user.email "wickra-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: sync the released version to ${V}"
+          # refresh-badges commits to this branch on its own hourly schedule;
+          # rebase onto anything it landed in the meantime so the two never clash.
+          git pull --rebase "https://github.com/${GITHUB_REPOSITORY}.git" main
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
