@@ -121,7 +121,7 @@ export default defineConfig({
         items: [
           { text: 'Release notes', link: 'https://github.com/wickra-lib/wickra-benchmark/releases' },
           { text: 'Changelog', link: 'https://github.com/wickra-lib/wickra-benchmark/blob/main/CHANGELOG.md' },
-          { text: 'docs.rs', link: 'https://docs.rs/wickra-benchmark/latest/wickra_benchmark/' },
+          { text: 'docs.rs', link: 'https://docs.rs/wickra-benchmark-core/latest/wickra_benchmark_core/' },
         ],
       },
       {
