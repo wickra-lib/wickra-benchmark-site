@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://benchmark.wickra.org"><img src="https://raw.githubusercontent.com/wickra-lib/.github/main/profile/wickra-banner.webp?v=514-7" alt="Wickra Benchmark — a reproducible, golden-verified benchmark suite — recompute any (strategy, dataset, report) in ten languages and confirm it byte-for-byte" width="100%"></a>
+  <a href="https://benchmark.wickra.org"><img src="https://raw.githubusercontent.com/wickra-lib/.github/main/profile/wickra-banner.svg?v=514-8" alt="Wickra Benchmark — a reproducible, golden-verified benchmark suite — recompute any (strategy, dataset, report) in ten languages and confirm it byte-for-byte" width="100%"></a>
 </p>
 
 [![Built on Wickra](https://raw.githubusercontent.com/wickra-lib/.github/main/profile/badges/wickra-benchmark-site/built-on.svg)](https://github.com/wickra-lib/wickra)
