@@ -6,7 +6,7 @@ FFM (Panama) over the C ABI — no JNI shim. `Benchmark` is `AutoCloseable`, so 
 <dependency>
   <groupId>org.wickra</groupId>
   <artifactId>wickra-benchmark</artifactId>
-  <version>0.1.5</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
