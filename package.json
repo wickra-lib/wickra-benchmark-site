@@ -11,11 +11,15 @@
     "preview": "vitepress preview"
   },
   "dependencies": {
-    "sharp": "^0.35.4"
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "vitepress": "^1.5.0",
     "vue": "^3.5.43"
+  },
+  "overrides": {
+    "vite": "^6.4.5",
+    "esbuild": "^0.25.0"
   }
 }
