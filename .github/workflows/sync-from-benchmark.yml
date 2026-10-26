@@ -1,10 +1,18 @@
 name: Sync from wickra-benchmark
 
-# The version this site shows is decided in wickra-lib/wickra-benchmark: the latest
-# release, not the version on main -- between a bump merging and its tag being
-# pushed, Cargo.toml is ahead of anything a reader can install. Pulling it on a
-# schedule is the only trigger that can work: the value changes in the OTHER
-# repository, so no push here is the event that makes this page wrong.
+# Every value this site states about wickra-benchmark is decided elsewhere and
+# pulled from there:
+#
+# - The version -- wickra-benchmark's latest release, not the version on main:
+#   between a bump merging and its tag being pushed, Cargo.toml is ahead
+#   of anything a reader can install.
+# - The indicator counts -- the core's, and the backtest registry's that the
+#   registry products resolve through -- at the latest releases, set by the
+#   org's one rule set, wickra-lib/.github's scripts/sync-counts.mjs, checked
+#   out at a pinned commit (site_current.py moves the pin).
+#
+# A schedule is the only trigger that can work: the values change in the OTHER
+# repositories, so no push here is the event that makes this page wrong.
 #
 # Same shape as webpage's sync-from-wickra.yml.
 on:
@@ -17,7 +25,7 @@ permissions:
 
 jobs:
   sync:
-    name: Pull the released version
+    name: Pull the released version and the indicator counts
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -51,6 +59,31 @@ jobs:
           sed -i -E "s|<version>[0-9]+\.[0-9]+\.[0-9]+</version>|<version>${V}</version>|" index.md api/java.md
           sed -i -E "s|(org\.wickra:wickra-benchmark:)[0-9]+\.[0-9]+\.[0-9]+|\1${V}|" index.md api/java.md
 
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+
+      # One file, read-only, at the commit site_current.py pinned. It lands
+      # beside the site and is excluded from git, so the commit below cannot
+      # pick it up.
+      - name: Check out the count rules
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: wickra-lib/.github
+          ref: d683af6320d14973d311968842600b332b7d3e79
+          path: .wickra-org
+          sparse-checkout: scripts/sync-counts.mjs
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Set the indicator counts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo ".wickra-org/" >> .git/info/exclude
+          node .wickra-org/scripts/sync-counts.mjs --repo wickra-benchmark-site
+
       - name: Commit if changed
         id: commitcheck
         env:
@@ -58,7 +91,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "$(git status --porcelain)" ]; then
-            echo "already at version ${V}; nothing to commit"
+            echo "already at version ${V} with current counts; nothing to commit"
             echo "commit=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -69,5 +102,5 @@ jobs:
         uses: wickra-lib/.github/actions/signed-commit@da1bd395c27f33dbed632c8e4e48e12f85394858 # v1.1.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          message: "chore: sync the released version to ${{ steps.version.outputs.version }}"
+          message: "chore: sync the released version to ${{ steps.version.outputs.version }} and the indicator counts"
           paths: .

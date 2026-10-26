@@ -1,7 +1,7 @@
 {
   "name": "Wickra Benchmark",
   "short_name": "Wickra Benchmark",
-  "description": "An event-driven backtester on the Wickra core — backtest and live are byte-identical.",
+  "description": "A reproducible, golden-verified benchmark suite — recompute any (strategy, dataset, report) in ten languages and confirm it byte-for-byte.",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
